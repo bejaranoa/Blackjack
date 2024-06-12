@@ -5,36 +5,52 @@ import cards
 
 ctk.set_appearance_mode("light")
 ctk.set_default_color_theme("blue")
-root = ctk.CTk()
-root.geometry('700x500')
-root.minsize(700, 500)
-root.maxsize(700,500)
-
-root.configure()
 
 def get_random_card():
     return list(random.choice(list(cards.data.items())))[1]
 
-def play_button():
-    dealer_card = get_random_card()
-    player_card = get_random_card()
+class App(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        self.geometry('700x500')
+        self.minsize(700, 500)
+        self.maxsize(700,500)        
 
-    frame = ctk.CTkFrame(root)
-    player_label = ctk.CTkLabel(frame, text=f'player card: {player_card}')
-    dealer_label = ctk.CTkLabel(frame, text=f'dealer card: {dealer_card}',
-                                width=0.1)
-    ask = ctk.CTkLabel(frame, text='Hit or stand?')
-    frame.pack(fill="both", expand=1)
-    player_label.place(relx=0.06, rely = 0.5, anchor=ctk.CENTER)
-    dealer_label.place(relx= 0.06, rely = 0.02, anchor=ctk.CENTER)
-    ask.place(relx=0.5, rely = 0.5, anchor=ctk.CENTER)
+        self.dealer_card = get_random_card()
+        self.player_card = get_random_card()
 
-button = ctk.CTkButton(master=root, text="Play", command=play_button)
-button.place(relx=0.5, rely=0.40, anchor=ctk.CENTER)
+        def check_player_score():
+            if self.player_card > 21:
+                self.frame.destroy()
+                self.lost_frame = ctk.CTkFrame(self)
+                self.lost_frame.pack(fill="both", expand=1)
+                self.lost_label = ctk.CTkLabel(self.lost_frame, text="You lost idiot")
+                self.lost_label.place(relx=0.5,rely=0.5,anchor=ctk.CENTER)
 
+        def increment_player_score():
+            self.player_card = self.player_card + get_random_card()
+            check_player_score()
+            self.player_label.configure(text=f'playre card: {self.player_card}')
 
-quit=ctk.CTkButton(master=root, text="Quit", command=root.destroy)
-quit.place(relx=0.5, rely=0.60, anchor=ctk.CENTER)
+        def increment_dealer_score():
+            self.dealer_card = self.dealer_card + get_random_card()
 
+        def play_button():
+            self.frame = ctk.CTkFrame(self)
+            self.player_label = ctk.CTkLabel(self.frame, text=f'player card: {self.player_card}')
+            dealer_label = ctk.CTkLabel(self.frame, text=f'dealer card: {self.dealer_card}',
+                                        width=0.1)
+            self.frame.pack(fill="both", expand=1)
+            self.player_label.place(relx=0.06, rely = 0.5, anchor=ctk.CENTER)
+            dealer_label.place(relx= 0.06, rely = 0.02, anchor=ctk.CENTER)
+            hit=ctk.CTkButton(self.frame, text="HIT", command=increment_player_score)
+            hit.place(relx= 0.5, rely = 0.5, anchor=ctk.CENTER)
+        
+        button = ctk.CTkButton(master=self, text="Play", command=play_button)
+        button.place(relx=0.5, rely=0.40, anchor=ctk.CENTER)
 
-root.mainloop()
+        quit = ctk.CTkButton(master=self, text="Quit", command=self.destroy)
+        quit.place(relx=0.5, rely=0.60, anchor=ctk.CENTER)
+    
+app = App()
+app.mainloop()
