@@ -18,28 +18,32 @@ class App(ctk.CTk):
 
         self.dealer_card = get_random_card()
         self.player_card = get_random_card()
+        self.player_card2 = get_random_card()
+        self.total_player = self.player_card + self.player_card2
 
         def check_player_score():
-            if self.player_card > 21:
+            if self.total_player > 21:
                 self.frame.destroy()
                 self.lost_frame = ctk.CTkFrame(self)
                 self.lost_frame.pack(fill="both", expand=1)
-                self.lost_label = ctk.CTkLabel(self.lost_frame, text="You lost idiot")
+                self.lost_label = ctk.CTkLabel(self.lost_frame, 
+                                               text="You Busted ;)")
                 self.lost_label.place(relx=0.5,rely=0.5,anchor=ctk.CENTER)
 
         def increment_player_score():
-            self.player_card = self.player_card + get_random_card()
+            self.total_player = self.total_player + get_random_card()
             check_player_score()
-            self.player_label.configure(text=f'playre card: {self.player_card}')
+            self.player_label.configure(text=f'player card: {self.total_player}')
 
         def increment_dealer_score():
             self.dealer_card = self.dealer_card + get_random_card()
 
         def play_button():
             self.frame = ctk.CTkFrame(self)
-            self.player_label = ctk.CTkLabel(self.frame, text=f'player card: {self.player_card}')
-            dealer_label = ctk.CTkLabel(self.frame, text=f'dealer card: {self.dealer_card}',
-                                        width=0.1)
+            self.player_label = ctk.CTkLabel(self.frame, 
+                    text=f'player card:{self.player_card} {self.player_card2} = {self.total_player}')
+            dealer_label = ctk.CTkLabel(self.frame, 
+                            text=f'dealer card: {self.dealer_card}',width=0.1)
             self.frame.pack(fill="both", expand=1)
             self.player_label.place(relx=0.06, rely = 0.5, anchor=ctk.CENTER)
             dealer_label.place(relx= 0.06, rely = 0.02, anchor=ctk.CENTER)
