@@ -19,14 +19,12 @@ def get_random_card():
     return random_card
 
 class App(ctk.CTk):
+   #Window and size
     def __init__(self):
         super().__init__()
         self.geometry('700x500')
         self.minsize(700, 500)
         self.maxsize(700,500)        
-
-        self.dealer_cards = [get_random_card()]
-        self.player_cards = [get_random_card(), get_random_card()]
 
         button = ctk.CTkButton(master=self, text="Play", command=self.play_button)
         button.place(relx=0.5, rely=0.40, anchor=ctk.CENTER)
@@ -50,18 +48,20 @@ class App(ctk.CTk):
             self.dealer_cards.append(get_random_card())
             dealer_total = self.get_dealer_total()
             self.dealer_label.configure(text=f'dealer card: {dealer_total}')
-            time.sleep(0.8)
+            time.sleep(0.4)
         self.finish()
 
 
     def play_button(self):
+        self.dealer_cards = [get_random_card()]
+        self.player_cards = [get_random_card(), get_random_card()]
         self.frame = ctk.CTkFrame(self)
         self.player_label = ctk.CTkLabel(self.frame, 
         text=f'player card: {self.add_player_cards()} = {self.get_player_total()}')
         self.dealer_label = ctk.CTkLabel(self.frame, 
                         text=f'dealer card: {self.get_dealer_total()}',width=0.1)
         self.frame.pack(fill="both", expand=1)
-        self.player_label.place(relx=0.06, rely = 0.5, anchor=ctk.CENTER)
+        self.player_label.place(relx=0.08, rely = 0.5, anchor=ctk.CENTER)
         self.dealer_label.place(relx= 0.06, rely = 0.02, anchor=ctk.CENTER)
         hit=ctk.CTkButton(self.frame, text="HIT", command=self.increment_player_score)
         hit.place(relx= 0.35, rely = 0.5, anchor=ctk.CENTER)
@@ -79,9 +79,9 @@ class App(ctk.CTk):
         dealer_total = self.get_dealer_total()
         player_total = self.get_player_total()
         if dealer_total > 21 or player_total > dealer_total:
-            self.display_game_status("YOU WIN ;P")
+            self.display_game_status(f"YOU WIN ;P The Dealer Got {dealer_total}")
         else:
-            self.display_game_status(f"""YOU LOSE ;(          The Dealer Got {dealer_total}""")
+            self.display_game_status(f"YOU LOSE ;( The Dealer Got {dealer_total}")
         play_again = ctk.CTkButton(text="Play again", command=self.status_frame.destroy,
                                    master=self.status_frame)
         play_again.place(relx=0.5, rely=0.6, anchor=ctk.CENTER)
