@@ -32,16 +32,19 @@ class App(ctk.CTk):
         self.exit = ctk.CTkButton(master=self, text="Quit", command=self.destroy)
         self.exit.place(relx=0.5, rely=0.60, anchor=ctk.CENTER)
 
+    #Check if player busted
     def check_player_score(self):
         if self.get_player_total() > 21:
             self.frame.destroy()
             self.display_game_status("You Busted ;)")
 
+    #Increases player's score
     def increment_player_score(self):
         self.player_cards.append(get_random_card())
         self.check_player_score()
         self.player_label.configure(text=f'player card: {self.add_player_cards()} = {self.get_player_total()}')
 
+    #Increases dealer's score
     def increment_dealer_score(self):
         dealer_total = self.get_dealer_total()
         while dealer_total < 17:
@@ -51,7 +54,7 @@ class App(ctk.CTk):
             time.sleep(0.4)
         self.finish()
 
-
+    #Play button
     def play_button(self):
         self.dealer_cards = [get_random_card()]
         self.player_cards = [get_random_card(), get_random_card()]
@@ -68,6 +71,7 @@ class App(ctk.CTk):
         stand=ctk.CTkButton(self.frame, text='STAND', command=self.increment_dealer_score)
         stand.place(relx=0.65, rely=0.5, anchor=ctk.CENTER)
 
+    #Last frame/screen
     def display_game_status(self, message: str):
         self.frame.destroy()
         self.status_frame = ctk.CTkFrame(self)
@@ -75,6 +79,7 @@ class App(ctk.CTk):
         self.status_label = ctk.CTkLabel(self.status_frame, text=message)
         self.status_label.place(relx=0.5,rely=0.5,anchor=ctk.CENTER)
 
+    #Win/lose and play again/quit
     def finish(self):
         dealer_total = self.get_dealer_total()
         player_total = self.get_player_total()
@@ -91,19 +96,21 @@ class App(ctk.CTk):
         
         
         
-
+    #Dealer's total score
     def get_dealer_total(self):
         total = 0
         for card in self.dealer_cards:
             total = total + card
         return total
 
+    #Player's total score
     def get_player_total(self):
         total = 0
         for card in self.player_cards:
             total = total + card
         return total
 
+    #Adds players cards
     def add_player_cards(self):
         cards = ""
         for card in self.player_cards:
