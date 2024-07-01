@@ -26,18 +26,21 @@ class App(ctk.CTk):
         self.minsize(700, 500)
         self.maxsize(700,500)
 
+        self.start()
+        
+    def start(self):
         self.menu_frame = ctk.CTkFrame(self)
         self.menu_frame.pack(fill="both", expand=1)
 
-        button = ctk.CTkButton(self.menu_frame, text="Play", command=self.play_button)
-        button.place(relx=0.5, rely=0.40, anchor=ctk.CENTER)
+        button = ctk.CTkButton(self.menu_frame, text="Play", command=self.play_button, width=140, height=40, font=('Impact', 25))
+        button.place(relx=0.5, rely=0.35, anchor=ctk.CENTER)
 
-        self.exit = ctk.CTkButton(self.menu_frame, text="Quit", command=self.destroy)
+        self.exit = ctk.CTkButton(self.menu_frame, text="Quit", command=self.destroy, width=140, height=40, font=('Impact', 25))
         self.exit.place(relx=0.5, rely=0.50, anchor=ctk.CENTER)
 
-        aid=ctk.CTkButton(self.menu_frame, text="Help", command=self.help_button)
-        aid.place(relx=0.5, rely=0.6, anchor=ctk.CENTER)
-        
+        aid=ctk.CTkButton(self.menu_frame, text="Help", command=self.help_button, width=140, height=40, font=('Impact', 25))
+        aid.place(relx=0.5, rely=0.65, anchor=ctk.CENTER)
+
     def check_player_score(self):
         if self.get_player_total() > 21:
             self.frame.destroy()
@@ -70,9 +73,9 @@ class App(ctk.CTk):
         self.frame.pack(fill="both", expand=1)
         self.player_label.place(relx=0.08, rely = 0.5, anchor=ctk.CENTER)
         self.dealer_label.place(relx= 0.06, rely = 0.02, anchor=ctk.CENTER)
-        hit=ctk.CTkButton(self.frame, text="HIT", command=self.increment_player_score)
+        hit=ctk.CTkButton(self.frame, text="HIT", command=self.increment_player_score, width=140, height=40, font=('Impact', 25))
         hit.place(relx= 0.35, rely = 0.5, anchor=ctk.CENTER)
-        stand=ctk.CTkButton(self.frame, text='STAND', command=self.increment_dealer_score)
+        stand=ctk.CTkButton(self.frame, text='STAND', command=self.increment_dealer_score, width=140, height=40, font=('Impact', 25))
         stand.place(relx=0.65, rely=0.5, anchor=ctk.CENTER)
 
     def display_game_status(self, message: str):
@@ -90,10 +93,10 @@ class App(ctk.CTk):
         else:
             self.display_game_status(f"YOU LOSE  The Dealer Got {dealer_total}")
         play_again = ctk.CTkButton(text="Play again", command=self.restart,
-                                   master=self.status_frame)
+                                   master=self.status_frame, width=140, height=40, font=('Impact', 25))
         play_again.place(relx=0.5, rely=0.6, anchor=ctk.CENTER)
         done = ctk.CTkButton(text='Quit', command=self.destroy, 
-                             master=self.status_frame)
+                             master=self.status_frame, width=140, height=40, font=('Impact', 25))
         done.place(relx=0.5, rely=0.7, anchor=ctk.CENTER)
 
     def restart(self):
@@ -119,22 +122,31 @@ class App(ctk.CTk):
             cards = cards + f' {str(card)}'
         return cards
     
+    def atras(self):
+        self.help_frame1.destroy()
+        self.start()
+
+    
     def help_button(self):
         self.menu_frame.destroy()
         self.help_frame1 = ctk.CTkFrame(self)
         self.help_frame1.pack(fill="both", expand=1)
         text=ctk.CTkLabel(self.help_frame1, 
                           text="The goal of blackjack is simple.\nAll one"
-                           " needs to do to win is have a higher \nhand value "
-                           "than the dealer, without going over \n21. Players "
-                           "are dealt two cards and can then choose \nto “hit” "
-                           "(receive additional cards) or “stand” \n(keep their "
-                           "current hand)." )
+                           " needs to do to win is have a higher \nhand value"
+                           " than the dealer, without going over \n21. Players"
+                           " are dealt two cards and can then choose \nto “hit”"
+                           " (receive additional cards) or “stand” \n(keep their"
+                           " current hand).", font=('Fixedsys', 20))
         text.place(relx=0.5,rely=0.5,anchor=ctk.CENTER)
+        go_back = ctk.CTkButton(text="Go back", 
+                    command=self.atras, master=self.help_frame1, width=140, height=40, font=('Impact', 25))
+        go_back.place(relx=0.5, rely=0.7, anchor=ctk.CENTER)
 
 
 
 
+ 
 if __name__ == "__main__":
     app = App()
     app.mainloop()
