@@ -20,6 +20,7 @@ def get_random_card():
 
 class App(ctk.CTk):
 
+
     def __init__(self):
         super().__init__()
         self.geometry('700x500')
@@ -27,6 +28,8 @@ class App(ctk.CTk):
         self.maxsize(700,500)
 
         self.start()
+
+    #Menu:
         
     def start(self):
         self.menu_frame = ctk.CTkFrame(self)
@@ -40,6 +43,8 @@ class App(ctk.CTk):
 
         aid=ctk.CTkButton(self.menu_frame, text="Help", command=self.help_button, width=140, height=40, font=('Impact', 25))
         aid.place(relx=0.5, rely=0.65, anchor=ctk.CENTER)
+
+    # Game:
 
     def check_player_score(self):
         if self.get_player_total() > 21:
@@ -78,12 +83,24 @@ class App(ctk.CTk):
         stand=ctk.CTkButton(self.frame, text='STAND', command=self.increment_dealer_score, width=140, height=40, font=('Impact', 25))
         stand.place(relx=0.65, rely=0.5, anchor=ctk.CENTER)
 
+    #Endgame:
+        
+    def end_game_buttons(self):
+        play_again = ctk.CTkButton(text="Play again", command=self.restart,
+            master=self.status_frame, width=140, height=40, font=('Impact', 25))
+        play_again.place(relx=0.5, rely=0.6, anchor=ctk.CENTER)
+        done = ctk.CTkButton(text='Quit', command=self.destroy, 
+                             master=self.status_frame, width=140, height=40, font=('Impact', 25))
+        done.place(relx=0.5, rely=0.7, anchor=ctk.CENTER)
+
+
     def display_game_status(self, message: str):
         self.frame.destroy()
         self.status_frame = ctk.CTkFrame(self)
         self.status_frame.pack(fill="both", expand=1)
         self.status_label = ctk.CTkLabel(self.status_frame, text=message)
         self.status_label.place(relx=0.5,rely=0.5,anchor=ctk.CENTER)
+        self.end_game_buttons()
 
     def finish(self):
         dealer_total = self.get_dealer_total()
@@ -92,13 +109,8 @@ class App(ctk.CTk):
             self.display_game_status(f"YOU WIN  The Dealer Got {dealer_total}")
         else:
             self.display_game_status(f"YOU LOSE  The Dealer Got {dealer_total}")
-        play_again = ctk.CTkButton(text="Play again", command=self.restart,
-                                   master=self.status_frame, width=140, height=40, font=('Impact', 25))
-        play_again.place(relx=0.5, rely=0.6, anchor=ctk.CENTER)
-        done = ctk.CTkButton(text='Quit', command=self.destroy, 
-                             master=self.status_frame, width=140, height=40, font=('Impact', 25))
-        done.place(relx=0.5, rely=0.7, anchor=ctk.CENTER)
-
+        self.end_game_buttons()
+        
     def restart(self):
         self.status_frame.destroy()
         self.play_button()
@@ -122,8 +134,11 @@ class App(ctk.CTk):
             cards = cards + f' {str(card)}'
         return cards
     
-    def atras(self):
+    # Help:
+
+    def back(self):
         self.help_frame1.destroy()
+        self.help_frame2.destroy()
         self.start()
 
     
@@ -140,8 +155,32 @@ class App(ctk.CTk):
                            " current hand).", font=('Fixedsys', 20))
         text.place(relx=0.5,rely=0.5,anchor=ctk.CENTER)
         go_back = ctk.CTkButton(text="Go back", 
-                    command=self.atras, master=self.help_frame1, width=140, height=40, font=('Impact', 25))
+                    command=self.back, master=self.help_frame1, width=140, height=40, font=('Impact', 25))
         go_back.place(relx=0.5, rely=0.7, anchor=ctk.CENTER)
+        page_2=ctk.CTkButton(text='==>', command=self.pag2, master=self.help_frame1, width=70, height=20, font=('Impact', 25) )
+        page_2.place(relx=0.9, rely=0.5, anchor=ctk.CENTER)
+
+    def pag2(self):
+        self.help_frame1.destroy()
+        self.help_frame2 = ctk.CTkFrame(self)
+        self.help_frame2.pack(fill='both', expand=1)
+        go_back = ctk.CTkButton(text="Go back", 
+                    command=self.back, master=self.help_frame2, width=140, height=40, font=('Impact', 25))
+        go_back.place(relx=0.5, rely=0.7, anchor=ctk.CENTER)
+        hit=ctk.CTkLabel(self.help_frame2, text="HIT", font=('Impact', 25))
+        hit.place(relx= 0.35, rely = 0.5, anchor=ctk.CENTER)
+        stand=ctk.CTkLabel(self.help_frame2, text="STAND", font=('Impact', 25))
+        stand.place(relx= 0.65, rely = 0.5, anchor=ctk.CENTER)
+        hit_ex=ctk.CTkLabel(text='By clicking the hit button, \nyour hand value'
+                'will increase', font=('Fixedsys', 20), master=self.help_frame2)
+        hit_ex.place(relx= 0.3, rely = 0.4, anchor=ctk.CENTER)
+        stand_ex=ctk.CTkLabel(text='By clicking the stand button, \n you will'
+'not be dealt any more cards', font=('Fixedsys', 20), master=self.help_frame2)
+        stand_ex.place(relx= 0.7, rely = 0.4, anchor=ctk.CENTER)
+        player_score=ctk.CTkLabel(text="Total player score", master=self.help_frame2)
+        player_score.place(relx=0.08, rely = 0.5, anchor=ctk.CENTER)
+        dealer_score=ctk.CTkLabel(text='Total dealer score', master=self.help_frame2)
+        dealer_score.place(relx= 0.08, rely = 0.02, anchor=ctk.CENTER)
 
 
 
