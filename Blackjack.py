@@ -1,13 +1,9 @@
 import customtkinter as ctk
 from PIL import Image
-import random
-import cards
-import time
-import copy
-
+import copy, pywinstyles, time, cards, random
 
 ctk.set_appearance_mode("dark")
-ctk.set_default_color_theme("green")
+ctk.set_default_color_theme("blue")
 
 
 class App(ctk.CTk):
@@ -79,15 +75,26 @@ class App(ctk.CTk):
     def play_button(self):
         if hasattr(self, "menu_frame"):
             self.menu_frame.destroy()
+
+      
+        image = Image.open("back.jpg")
+        background_image = ctk.CTkImage(image, size=(700, 500))
+
         self.dealer_cards = [self.get_random_card()]
         self.player_cards = [self.get_random_card(), self.get_random_card()]
         self.frame = ctk.CTkFrame(self)
-        self.player_label = ctk.CTkLabel(self.frame, 
+
+        label = ctk.CTkLabel(self.frame, image=background_image, text='')
+        label.place(relx=0.5, rely=0.5, anchor=ctk.CENTER)
+        self.player_label = ctk.CTkLabel(self.frame,
     text=f'player card: \n{self.add_player_cards()} = {self.get_player_total()}', 
     font=('Fixedsys', 20))
+        pywinstyles.set_opacity(self.player_label, color="#2b2b2b")
+
         self.dealer_label = ctk.CTkLabel(self.frame, 
                         text=f'dealer card:\n {self.get_dealer_total()}',
                         width=0.1, font=('Fixedsys', 20))
+        pywinstyles.set_opacity(self.dealer_label, color="#2b2b2b")
         self.frame.pack(fill="both", expand=1)
         self.player_label.place(relx=0.1, rely = 0.5, anchor=ctk.CENTER)
         self.dealer_label.place(relx= 0.1, rely = 0.03, anchor=ctk.CENTER)
@@ -97,7 +104,8 @@ class App(ctk.CTk):
         stand=ctk.CTkButton(self.frame, text='STAND', 
 command=self.increment_dealer_score, width=140, height=40, font=('Impact', 25))
         stand.place(relx=0.65, rely=0.5, anchor=ctk.CENTER)
-
+        
+        
     #Endgame:
         
     def end_game_buttons(self):
