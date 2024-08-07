@@ -55,13 +55,15 @@ class App(ctk.CTk):
         player_total = self.get_player_total()
         if self.get_player_total() > 21:
             self.frame.destroy()
-            self.display_game_status(f"You Busted, your score was {player_total}")
+            self.display_game_status(f"You Busted, your score was" 
+                                     f"{player_total}")
             self.create_new_copy()
 
     def increment_player_score(self):
         self.player_cards.append(self.get_random_card())
         self.check_player_score()
-        self.player_label.configure(text=f'player card:\n {self.add_player_cards()} = {self.get_player_total()}')
+        self.player_label.configure(text=f'player card:\n'
+                    f'{self.add_player_cards()} = {self.get_player_total()}')
 
     def increment_dealer_score(self):
         dealer_total = self.get_dealer_total()
@@ -69,7 +71,7 @@ class App(ctk.CTk):
             self.dealer_cards.append(self.get_random_card())
             dealer_total = self.get_dealer_total()
             self.dealer_label.configure(text=f'dealer card: {dealer_total}')
-            time.sleep(0.4)
+            time.sleep(0.2)
         self.finish()
 
     def play_button(self):
@@ -87,8 +89,8 @@ class App(ctk.CTk):
         label = ctk.CTkLabel(self.frame, image=background_image, text='')
         label.place(relx=0.5, rely=0.5, anchor=ctk.CENTER)
         self.player_label = ctk.CTkLabel(self.frame,
-    text=f'player card: \n{self.add_player_cards()} = {self.get_player_total()}', 
-    font=('Fixedsys', 20))
+    text=f'player card: \n{self.add_player_cards()} = {self.get_player_total()}'
+    , font=('Fixedsys', 20))
         pywinstyles.set_opacity(self.player_label, color="#2b2b2b")
 
         self.dealer_label = ctk.CTkLabel(self.frame, 
@@ -98,12 +100,14 @@ class App(ctk.CTk):
         self.frame.pack(fill="both", expand=1)
         self.player_label.place(relx=0.1, rely = 0.5, anchor=ctk.CENTER)
         self.dealer_label.place(relx= 0.1, rely = 0.03, anchor=ctk.CENTER)
-        hit=ctk.CTkButton(self.frame, text="HIT",
+        self.hit=ctk.CTkButton(self.frame, text="HIT",
  command=self.increment_player_score, width=140, height=40, font=('Impact', 25))
-        hit.place(relx= 0.35, rely = 0.5, anchor=ctk.CENTER)
-        stand=ctk.CTkButton(self.frame, text='STAND', 
+        self.hit.place(relx= 0.35, rely = 0.5, anchor=ctk.CENTER)
+        pywinstyles.set_opacity(self.hit, color="#2b2b2b")
+        self.stand=ctk.CTkButton(self.frame, text='STAND', 
 command=self.increment_dealer_score, width=140, height=40, font=('Impact', 25))
-        stand.place(relx=0.65, rely=0.5, anchor=ctk.CENTER)
+        self.stand.place(relx=0.65, rely=0.5, anchor=ctk.CENTER)
+        pywinstyles.set_opacity(self.stand, color="#2b2b2b")
         
         
     #Endgame:
@@ -121,7 +125,8 @@ command=self.increment_dealer_score, width=140, height=40, font=('Impact', 25))
         self.frame.destroy()
         self.status_frame = ctk.CTkFrame(self)
         self.status_frame.pack(fill="both", expand=1)
-        self.status_label = ctk.CTkLabel(self.status_frame, text=message, font=('Fixedsys', 30))
+        self.status_label = ctk.CTkLabel(self.status_frame, text=message, 
+                                         font=('Fixedsys', 30))
         self.status_label.place(relx=0.5,rely=0.5,anchor=ctk.CENTER)
         self.end_game_buttons()
 
@@ -129,9 +134,11 @@ command=self.increment_dealer_score, width=140, height=40, font=('Impact', 25))
         dealer_total = self.get_dealer_total()
         player_total = self.get_player_total()
         if dealer_total > 21 or player_total > dealer_total:
-            self.display_game_status(f"YOU WIN  The Dealer Got {dealer_total}")
+            self.display_game_status(f"YOU WIN  The Dealer Got "
+                                     f"{dealer_total}")
         elif dealer_total == player_total:
-            self.display_game_status(f'TIE   You and the dealer got {dealer_total}')
+            self.display_game_status(f'TIE   You and the dealer got'
+                                     f' {dealer_total}')
         else:
             self.display_game_status(f"YOU LOSE  The Dealer Got {dealer_total}")
         self.create_new_copy()
@@ -183,7 +190,7 @@ command=self.increment_dealer_score, width=140, height=40, font=('Impact', 25))
         go_back = ctk.CTkButton(text="Go back", 
                     command=self.back, master=self.help_frame1, width=140, 
                     height=40, font=('Impact', 25))
-        go_back.place(relx=0.5, rely=0.7, anchor=ctk.CENTER)
+        go_back.place(relx=0.5, rely=0.9, anchor=ctk.CENTER)
         page_2=ctk.CTkButton(text='==>', command=self.pag2, 
             master=self.help_frame1, width=70, height=20, font=('Impact', 25) )
         page_2.place(relx=0.9, rely=0.5, anchor=ctk.CENTER)
@@ -192,26 +199,41 @@ command=self.increment_dealer_score, width=140, height=40, font=('Impact', 25))
         self.help_frame1.destroy()
         self.help_frame2 = ctk.CTkFrame(self)
         self.help_frame2.pack(fill='both', expand=1)
+        image = Image.open("back.jpg")
+        background_image = ctk.CTkImage(image, size=(700, 500))
+        label = ctk.CTkLabel(self.help_frame2, image=background_image, text='')
+        label.place(relx=0.5, rely=0.5, anchor=ctk.CENTER)
+
         go_back = ctk.CTkButton(text="Go back", 
                     command=self.back, master=self.help_frame2, width=140, 
                     height=40, font=('Impact', 25))
-        go_back.place(relx=0.5, rely=0.7, anchor=ctk.CENTER)
+        go_back.place(relx=0.5, rely=0.9, anchor=ctk.CENTER)
         hit=ctk.CTkLabel(self.help_frame2, text="HIT", font=('Impact', 25))
         hit.place(relx= 0.35, rely = 0.5, anchor=ctk.CENTER)
         stand=ctk.CTkLabel(self.help_frame2, text="STAND", font=('Impact', 25))
         stand.place(relx= 0.65, rely = 0.5, anchor=ctk.CENTER)
         hit_ex=ctk.CTkLabel(text='By clicking the hit button, \nyour hand value'
-                ' will increase', font=('Fixedsys', 20), master=self.help_frame2)
+                ' will increase', font=('Fixedsys', 20),
+                  master=self.help_frame2)
         hit_ex.place(relx= 0.3, rely = 0.4, anchor=ctk.CENTER)
         stand_ex=ctk.CTkLabel(text='By clicking the stand button, \n you will '
 'not be dealt any more cards', font=('Fixedsys', 20), master=self.help_frame2)
         stand_ex.place(relx= 0.7, rely = 0.4, anchor=ctk.CENTER)
-        player_score=ctk.CTkLabel(text="player score:",
-                                master=self.help_frame2, font=('Fixedsys', 20))
-        player_score.place(relx=0.12, rely = 0.5, anchor=ctk.CENTER)
-        dealer_score=ctk.CTkLabel(text='dealer score:\n your' 
-"cards will be displayed here",master=self.help_frame2, font=('Fixedsys', 20))
-        dealer_score.place(relx= 0.12, rely = 0.03, anchor=ctk.CENTER)
+        player_score=ctk.CTkLabel(text="player score:\n your "
+"cards will be displayed here", master=self.help_frame2, font=('Fixedsys', 25))
+        player_score.place(relx=0.5, rely = 0.7, anchor=ctk.CENTER)
+        dealer_score=ctk.CTkLabel(text="dealer score:\n dealer's" 
+" cards will be displayed here",master=self.help_frame2, 
+font=('Fixedsys', 25))
+        dealer_score.place(relx= 0.5, rely = 0.2, anchor=ctk.CENTER)
+        pywinstyles.set_opacity(stand, color="#2b2b2b")
+        pywinstyles.set_opacity(hit, color="#2b2b2b")
+        pywinstyles.set_opacity(player_score, color="#2b2b2b")
+        pywinstyles.set_opacity(dealer_score, color="#2b2b2b")
+        pywinstyles.set_opacity(hit_ex, color="#2b2b2b")
+        pywinstyles.set_opacity(stand_ex, color="#2b2b2b")
+        pywinstyles.set_opacity(go_back, color="#2b2b2b")
+
 
  
 if __name__ == "__main__":
