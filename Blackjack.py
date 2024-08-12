@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from PIL import Image
-import copy, pywinstyles, time, cards, random
+import copy, pywinstyles, time, cards, random, threading
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
@@ -17,6 +17,8 @@ class App(ctk.CTk):
 
         self.create_new_copy()
         self.start()
+
+
 
     def create_new_copy(self):
         self.copied_cards = copy.deepcopy(cards.data)
@@ -55,7 +57,7 @@ class App(ctk.CTk):
         player_total = self.get_player_total()
         if self.get_player_total() > 21:
             self.frame.destroy()
-            self.display_game_status(f"You Busted, your score was" 
+            self.display_game_status(f"You Busted, your score was " 
                                      f"{player_total}")
             self.create_new_copy()
 
@@ -65,21 +67,26 @@ class App(ctk.CTk):
         self.player_label.configure(text=f'player card:\n'
                     f'{self.add_player_cards()} = {self.get_player_total()}')
 
-    def increment_dealer_score(self):
+    def dealer_check(self):
         dealer_total = self.get_dealer_total()
         while dealer_total < 17:
             self.dealer_cards.append(self.get_random_card())
             dealer_total = self.get_dealer_total()
             self.dealer_label.configure(text=f'dealer card: {dealer_total}')
-            time.sleep(0.2)
+            time.sleep(1)
         self.finish()
+
+
+
+    def increment_dealer_score(self):
+        threading.Thread(target=self.dealer_check).start() 
 
     def play_button(self):
         if hasattr(self, "menu_frame"):
             self.menu_frame.destroy()
 
       
-        image = Image.open("back.jpg")
+        image = Image.open("G:/My Drive/L2DTSD/Blackjack/back.jpg")
         background_image = ctk.CTkImage(image, size=(700, 500))
 
         self.dealer_cards = [self.get_random_card()]
@@ -90,16 +97,16 @@ class App(ctk.CTk):
         label.place(relx=0.5, rely=0.5, anchor=ctk.CENTER)
         self.player_label = ctk.CTkLabel(self.frame,
     text=f'player card: \n{self.add_player_cards()} = {self.get_player_total()}'
-    , font=('Fixedsys', 20))
+    , font=('Fixedsys', 25))
         pywinstyles.set_opacity(self.player_label, color="#2b2b2b")
 
         self.dealer_label = ctk.CTkLabel(self.frame, 
                         text=f'dealer card:\n {self.get_dealer_total()}',
-                        width=0.1, font=('Fixedsys', 20))
+                        width=0.1, font=('Fixedsys', 25))
         pywinstyles.set_opacity(self.dealer_label, color="#2b2b2b")
         self.frame.pack(fill="both", expand=1)
-        self.player_label.place(relx=0.1, rely = 0.5, anchor=ctk.CENTER)
-        self.dealer_label.place(relx= 0.1, rely = 0.03, anchor=ctk.CENTER)
+        self.player_label.place(relx=0.5, rely = 0.7, anchor=ctk.CENTER)
+        self.dealer_label.place(relx= 0.5, rely = 0.2, anchor=ctk.CENTER)
         self.hit=ctk.CTkButton(self.frame, text="HIT",
  command=self.increment_player_score, width=140, height=40, font=('Impact', 25))
         self.hit.place(relx= 0.35, rely = 0.5, anchor=ctk.CENTER)
@@ -114,11 +121,15 @@ command=self.increment_dealer_score, width=140, height=40, font=('Impact', 25))
         
     def end_game_buttons(self):
         play_again = ctk.CTkButton(text="Play again", command=self.restart,
-            master=self.status_frame, width=140, height=40, font=('Impact', 25))
+            master=self.status_frame, width=170, height=40, font=('Impact', 25))
         play_again.place(relx=0.5, rely=0.6, anchor=ctk.CENTER)
+        return_menu = ctk.CTkButton(text= "Return to menu", 
+        command=self.restarted, master=self.status_frame, width=140, 
+        height=40, font=('Impact',25))
+        return_menu.place(relx=0.5, rely=0.7, anchor=ctk.CENTER)
         done = ctk.CTkButton(text='Quit', command=self.destroy, 
-            master=self.status_frame, width=140, height=40, font=('Impact', 25))
-        done.place(relx=0.5, rely=0.7, anchor=ctk.CENTER)
+            master=self.status_frame, width=170, height=40, font=('Impact', 25))
+        done.place(relx=0.5, rely=0.8, anchor=ctk.CENTER)
 
 
     def display_game_status(self, message: str):
@@ -129,6 +140,10 @@ command=self.increment_dealer_score, width=140, height=40, font=('Impact', 25))
                                          font=('Fixedsys', 30))
         self.status_label.place(relx=0.5,rely=0.5,anchor=ctk.CENTER)
         self.end_game_buttons()
+
+    def restarted(self):
+        self.status_frame.destroy()
+        self.start()
 
     def finish(self):
         dealer_total = self.get_dealer_total()

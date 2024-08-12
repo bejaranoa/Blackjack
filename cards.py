@@ -1,4 +1,4 @@
-cards = {
+data = {
     "k_hat":10,
     "k_dmn":10,
     "k_clb":10,
@@ -52,4 +52,3 @@ cards = {
     "1_clb":1,
     "1_spd":1,
 }
-
